@@ -1,40 +1,50 @@
 package io.javalab.mockitospringboot.service;
 
+import io.javalab.mockitospringboot.service.external.QuarterGeneratorService;
 import io.javalab.mockitospringboot.service.external.QuarterGeneratorServiceImpl;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 public class TaxCalculation {
 
-    private QuarterGeneratorServiceImpl quarterGeneratorServiceImpl;
+    private QuarterGeneratorService quarterGeneratorService;
 
-    public TaxCalculation(QuarterGeneratorServiceImpl quarterGeneratorServiceImpl) {
-        this.quarterGeneratorServiceImpl = quarterGeneratorServiceImpl;
-    }
 
-    public TaxCalculation() {
-
+    public void setQuarterGeneratorService(QuarterGeneratorService quarterGeneratorService) {
+        this.quarterGeneratorService = quarterGeneratorService;
     }
 
     public Integer calculateTaxPerAnnual(int [] quarters){
         return Arrays.stream(quarters).mapToObj(Integer::new).reduce(Integer::sum).orElseThrow(ArithmeticException::new);
     }
 
-    public Integer calculateTaxPerQuarter (int quarterNumber)throws Exception{
-        Integer result;
+    public Integer [] calculateTaxPerQuarter (Integer quarterNumber)throws Exception{
+
+       Integer [] result;
         switch (quarterNumber){
-            case 1:
-                result=Arrays.asList(quarterGeneratorServiceImpl.retrieveFirstQuarter()).stream().reduce((integer, integer2) -> integer+integer2).orElseThrow(ArithmeticException::new);
             case 2:
-                result=Arrays.asList(quarterGeneratorServiceImpl.retrieveSecondQuarter()).stream().reduce((integer, integer2) -> integer+integer2).orElseThrow(ArithmeticException::new);
+                result=this.quarterGeneratorService.retrieveSecondQuarter();
+                break;
             case 3:
-                result=Arrays.asList(quarterGeneratorServiceImpl.retrieveThirdQuarter()).stream().reduce((integer, integer2) -> integer+integer2).orElseThrow(ArithmeticException::new);
+                result=this.quarterGeneratorService.retrieveThirdQuarter();
+                break;
             case 4:
-                result=Arrays.asList(quarterGeneratorServiceImpl.retrieveFourthQuarter()).stream().reduce((integer, integer2) -> integer+integer2).orElseThrow(ArithmeticException::new);
+                result=this.quarterGeneratorService.retrieveFourthQuarter();
+                break;
             default:
-                result=Arrays.asList(quarterGeneratorServiceImpl.retrieveFirstQuarter()).stream().reduce((integer, integer2) -> integer+integer2).orElseThrow(ArithmeticException::new);
+                result=this.quarterGeneratorService.retrieveFirstQuarter();
 
         }
         return result;
     }
+/*
+    public static void main(String[] args) throws Exception {
+
+        QuarterGeneratorServiceImpl s1=new QuarterGeneratorServiceImpl();
+        TaxCalculation t1=new TaxCalculation(s1);
+       // t1.setQuarterGeneratorService(s1);
+        //System.out.println(Arrays.stream(s1.retrieveSecondQuarter()).reduce(Integer::sum));
+        System.out.println(t1.calculateTaxPerQuarter(3));
+    }*/
 }
