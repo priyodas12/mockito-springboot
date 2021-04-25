@@ -5,23 +5,34 @@ import io.javalab.mockitospringboot.service.external.QuarterGeneratorServiceImpl
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Arrays;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class TaxCalculationServiceTest {
 
+    @InjectMocks
+    TaxCalculation taxCalculation;//=new TaxCalculation();
 
-    TaxCalculation taxCalculation=new TaxCalculation();
-    QuarterGeneratorService service=mock(QuarterGeneratorService.class);
+    @Mock
+    QuarterGeneratorService service;//=mock(QuarterGeneratorService.class);
 
-    @BeforeEach
+
+    /* @BeforeEach
     public void beforeAll(){
         taxCalculation.setQuarterGeneratorService(service);
-    }
+    }*/
 
     @Test
     void calculateTaxPerQuarter_basic() throws Exception {
